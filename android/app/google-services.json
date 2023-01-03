@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "457736671133",
+    "project_id": "charge-go",
+    "storage_bucket": "charge-go.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:457736671133:android:0c4d911036149d25402974",
+        "android_client_info": {
+          "package_name": "com.example.charge_go"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "457736671133-jjotlg4s96ra1slo6hkugofg31hslqq3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBN_cWRkero81_avIULjs2GDNGweVgl09w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "457736671133-jjotlg4s96ra1slo6hkugofg31hslqq3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
