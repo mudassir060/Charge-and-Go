@@ -37,13 +37,11 @@ class _login_screenState extends State<login_screen> {
     final String useremail = useremailcontroller.text.trim();
     final String userpassword = userpasswordcontroller.text;
     try {
-      if (
-      useremail != '' &&
-          userpassword != '') {
+      if (useremail != '' && userpassword != '') {
         final UserCredential user = await auth.signInWithEmailAndPassword(
             email: useremail, password: userpassword);
         final DocumentSnapshot snapshot =
-        await firestore.collection("users").doc(user.user?.uid).get();
+            await firestore.collection("users").doc(user.user?.uid).get();
         storage.write(key: "UID", value: user.user?.uid);
         final data = snapshot.data();
         setState(() {
@@ -52,12 +50,10 @@ class _login_screenState extends State<login_screen> {
         Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) =>
-                  HomeScreen(
+              builder: (context) => HomeScreen(
                     UserData: UserData,
                     AdminData: widget.admindata,
-                  )
-          ),
+                  )),
         );
       } else {
         snackbar("Please fill all text field");
@@ -70,18 +66,10 @@ class _login_screenState extends State<login_screen> {
     });
   }
 
-
-
   @override
   Widget build(BuildContext context) {
-    var width = MediaQuery
-        .of(context)
-        .size
-        .width;
-    var height = MediaQuery
-        .of(context)
-        .size
-        .height;
+    var width = MediaQuery.of(context).size.width;
+    var height = MediaQuery.of(context).size.height;
     return Scaffold(
       body: Center(
         child: SingleChildScrollView(
@@ -120,7 +108,8 @@ class _login_screenState extends State<login_screen> {
                           SizedBox(
                               height: 20,
                               width: 20,
-                              child: Image.asset(email_icon, fit: BoxFit.cover)),
+                              child:
+                                  Image.asset(email_icon, fit: BoxFit.cover)),
                           SizedBox(
                             width: 220,
                             child: TextField(
@@ -232,8 +221,7 @@ class _login_screenState extends State<login_screen> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) =>
-                                        Signup_screen(
+                                    builder: (context) => Signup_screen(
                                           admindata: widget.admindata,
                                         )));
                           },

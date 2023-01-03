@@ -6,7 +6,7 @@ class loadingwidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SpinKitPouringHourGlassRefined(
+    return SpinKitCircle(
       color: color,
       size: 50.0,
     );
