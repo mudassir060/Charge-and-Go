@@ -1,6 +1,3 @@
-const String bikeIcon = "assets/icons/bike_icon.png";
-const String bicycleIcon = "assets/icons/bicycle_icon.png";
-const String babyAndKidsIcon = "assets/icons/baby_and_kids_icon.png";
 const String backButtonIcon = "assets/icons/back_buttonIcon.png";
 const String buisnessIcon = "assets/icons/buisness_icon.png";
 const String chatIcon = "assets/icons/chat_icon.png";
@@ -20,7 +17,9 @@ const String hobbyIcon = "assets/icons/hobby_icon.png";
 const String homeApplianceIcon = "assets/icons/home_appliance_icon.png";
 const String homeIcon = "assets/icons/home_icon.png";
 const String jobIcon = "assets/icons/job_icon.png";
+const String email_icon = "assets/icons/email_icon.png";
 const String lockIcon = "assets/icons/lock_icon.png";
+const String rollNo_icon = "assets/icons/rollNo_icon.png";
 const String menuIcon = "assets/icons/menu_icon.png";
 const String motorIcon = "assets/icons/motor_icon.png";
 const String multimediaIcon = "assets/icons/multimedia_icon.png";

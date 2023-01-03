@@ -120,7 +120,7 @@ class _login_screenState extends State<login_screen> {
                           SizedBox(
                               height: 20,
                               width: 20,
-                              child: Image.asset(phoneIcon, fit: BoxFit.cover)),
+                              child: Image.asset(email_icon, fit: BoxFit.cover)),
                           SizedBox(
                             width: 220,
                             child: TextField(

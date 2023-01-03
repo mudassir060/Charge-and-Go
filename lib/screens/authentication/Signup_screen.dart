@@ -162,7 +162,7 @@ class _Signup_screenState extends State<Signup_screen> {
                           SizedBox(
                               height: 20,
                               width: 20,
-                              child: Image.asset(lockIcon, fit: BoxFit.cover)),
+                              child: Image.asset(email_icon, fit: BoxFit.cover)),
                           SizedBox(
                             width: 220,
                             child: TextField(
@@ -183,14 +183,14 @@ class _Signup_screenState extends State<Signup_screen> {
                           SizedBox(
                               height: 20,
                               width: 20,
-                              child: Image.asset(lockIcon, fit: BoxFit.cover)),
+                              child: Image.asset(rollNo_icon, fit: BoxFit.cover)),
                           SizedBox(
                             width: 220,
                             child: TextField(
                               controller: rollNocontroller,
-                              decoration: InputDecoration(
-                                border: const UnderlineInputBorder(),
-                                hintText: "rollNo",
+                              decoration: const InputDecoration(
+                                border: UnderlineInputBorder(),
+                                hintText: "Registration No",
                               ),
                             ),
                           ),
