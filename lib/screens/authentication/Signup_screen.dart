@@ -124,172 +124,186 @@ class _Signup_screenState extends State<Signup_screen> {
                     borderRadius: BorderRadius.circular(20)),
                 child: Padding(
                   padding: const EdgeInsets.all(25.0),
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(18.0),
-                        child: Text(
-                          "Sign Up",
-                          style: TextStyle(
-                              fontSize: 25, fontWeight: FontWeight.bold),
+                  child: Form(
+                    autovalidateMode: AutovalidateMode.always,
+                    child: Column(
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.all(18.0),
+                          child: Text(
+                            "Sign Up",
+                            style: TextStyle(
+                                fontSize: 25, fontWeight: FontWeight.bold),
+                          ),
                         ),
-                      ),
 
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          SizedBox(
-                              height: 20,
-                              width: 20,
-                              child: Image.asset(userIcon, fit: BoxFit.cover)),
-                          SizedBox(
-                            width: 220,
-                            child: TextField(
-                              controller: usernamecontroller,
-                              decoration: const InputDecoration(
-                                  border: UnderlineInputBorder(),
-                                  hintText: "Name"),
-                            ),
-                          ),
-                        ],
-                      ),
-
-                      const SizedBox(height: 15),
-
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          SizedBox(
-                              height: 20,
-                              width: 20,
-                              child: Image.asset(email_icon, fit: BoxFit.cover)),
-                          SizedBox(
-                            width: 220,
-                            child: TextField(
-                              controller: emailcontroller,
-                              decoration: InputDecoration(
-                                border: const UnderlineInputBorder(),
-                                hintText: "Email",
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 15),
-
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          SizedBox(
-                              height: 20,
-                              width: 20,
-                              child: Image.asset(rollNo_icon, fit: BoxFit.cover)),
-                          SizedBox(
-                            width: 220,
-                            child: TextField(
-                              controller: rollNocontroller,
-                              decoration: const InputDecoration(
-                                border: UnderlineInputBorder(),
-                                hintText: "Registration No",
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-
-                      const SizedBox(height: 15),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          SizedBox(
-                              height: 20,
-                              width: 20,
-                              child: Image.asset(phoneIcon, fit: BoxFit.cover)),
-                          SizedBox(
-                            width: 220,
-                            child: TextField(
-                              controller: phonenocontroller,
-                              decoration: InputDecoration(
-                                border: const UnderlineInputBorder(),
-                                hintText: "Phone Number",
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 15),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          SizedBox(
-                              height: 20,
-                              width: 20,
-                              child: Image.asset(lockIcon, fit: BoxFit.cover)),
-                          SizedBox(
-                            width: 220,
-                            child: TextField(
-                              controller: userpasswordcontroller,
-                              decoration: InputDecoration(
-                                border: const UnderlineInputBorder(),
-                                hintText: "Password",
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      // const SizedBox(height: 15),
-
-
-                      // // // // // // // // // // //Privacy Policy // // // // // // // // // //
-
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      large_button(
-                          width: width,
-                          name: "Sign Up",
-                          function: () {
-                            register();
-                          },
-                          loading: looding),
-                      Padding(
-                        padding: const EdgeInsets.all(25.0),
-                        child: Row(
+                        Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
-                            Container(
-                              height: 1,
-                              width: 100,
-                              color: Colors.grey,
-                            ),
-                            const Text(
-                              "OR",
-                              style: TextStyle(
-                                  color: Colors.grey,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            Container(
-                              height: 1,
-                              width: 100,
-                              color: Colors.grey,
+                            SizedBox(
+                                height: 20,
+                                width: 20,
+                                child:
+                                    Image.asset(userIcon, fit: BoxFit.cover)),
+                            SizedBox(
+                              width: 220,
+                              child: TextField(
+                                controller: usernamecontroller,
+                                decoration: const InputDecoration(
+                                    border: UnderlineInputBorder(),
+                                    hintText: "Name"),
+                              ),
                             ),
                           ],
                         ),
-                      ),
-                      large_button(
-                          width: width,
-                          name: "Login Now",
-                          function: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => login_screen(
-                                          admindata: widget.admindata,
-                                        )));
-                          },
-                          loading: false),
-                    ],
+
+                        const SizedBox(height: 15),
+
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            SizedBox(
+                                height: 20,
+                                width: 20,
+                                child:
+                                    Image.asset(email_icon, fit: BoxFit.cover)),
+                            SizedBox(
+                              width: 220,
+                              child: TextField(
+                                controller: emailcontroller,
+                                decoration: InputDecoration(
+                                  border: const UnderlineInputBorder(),
+                                  hintText: "Email",
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 15),
+
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            SizedBox(
+                                height: 20,
+                                width: 20,
+                                child: Image.asset(rollNo_icon,
+                                    fit: BoxFit.cover)),
+                            SizedBox(
+                              width: 220,
+                              child: TextFormField(
+                                controller: rollNocontroller,
+                                decoration: const InputDecoration(
+                                  hintText: 'Registration No',
+                                ),
+                                onSaved: (String? value) {},
+                                validator: (String? value) {
+                                  return (value?.contains('-') == true &&
+                                          value?.contains('2k') == true &&
+                                          value?.length == 12)
+                                      ? null
+                                      : 'Use right format 2k18-itc-221';
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+
+                        const SizedBox(height: 15),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            SizedBox(
+                                height: 20,
+                                width: 20,
+                                child:
+                                    Image.asset(phoneIcon, fit: BoxFit.cover)),
+                            SizedBox(
+                              width: 220,
+                              child: TextField(
+                                controller: phonenocontroller,
+                                decoration: InputDecoration(
+                                  border: const UnderlineInputBorder(),
+                                  hintText: "Phone Number",
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 15),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            SizedBox(
+                                height: 20,
+                                width: 20,
+                                child:
+                                    Image.asset(lockIcon, fit: BoxFit.cover)),
+                            SizedBox(
+                              width: 220,
+                              child: TextField(
+                                controller: userpasswordcontroller,
+                                decoration: InputDecoration(
+                                  border: const UnderlineInputBorder(),
+                                  hintText: "Password",
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        // const SizedBox(height: 15),
+
+                        // // // // // // // // // // //Privacy Policy // // // // // // // // // //
+
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        large_button(
+                            width: width,
+                            name: "Sign Up",
+                            function: () {
+                              register();
+                            },
+                            loading: looding),
+                        Padding(
+                          padding: const EdgeInsets.all(25.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              Container(
+                                height: 1,
+                                width: 100,
+                                color: Colors.grey,
+                              ),
+                              const Text(
+                                "OR",
+                                style: TextStyle(
+                                    color: Colors.grey,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              Container(
+                                height: 1,
+                                width: 100,
+                                color: Colors.grey,
+                              ),
+                            ],
+                          ),
+                        ),
+                        large_button(
+                            width: width,
+                            name: "Login Now",
+                            function: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => login_screen(
+                                            admindata: widget.admindata,
+                                          )));
+                            },
+                            loading: false),
+                      ],
+                    ),
                   ),
                 ),
               ),
