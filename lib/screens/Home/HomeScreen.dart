@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 import '../../widgets/app_bar/my_app_bar_2.dart';
+import '../../widgets/snackbar.dart';
 import '../Navigation/MyDrawer.dart';
 import '../authentication/button.dart';
 import '../authentication/login_screen.dart';
@@ -18,6 +20,32 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  var barcode;
+  final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
+  Barcode? result;
+  QRViewController? controller;
+  void onQRViewCreated(QRViewController controller) {
+    controller.scannedDataStream.listen((qrData) {
+      setState(() {
+        barcode = qrData;
+        if (barcode?.format == BarcodeFormat.qrcode) {
+          try {
+            print("===========>${barcode?.code }");
+            // Navigator.push(
+            //     context,
+            //     MaterialPageRoute(
+            //         builder: (context) =>
+            //             ItemDisplay(key: const Key("item"), item: item)));
+          } on FormatException {
+            snackbar("Invalid QR Code!");
+          } on Exception {
+            snackbar("Error!");
+          }
+        }
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
@@ -33,7 +61,9 @@ class _HomeScreenState extends State<HomeScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                SizedBox(width: width,),
+                SizedBox(
+                  width: width,
+                ),
                 large_button(
                     width: 250,
                     name: "Login Now",
@@ -46,6 +76,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                   )));
                     },
                     loading: false),
+                Container(
+                  height: 300,
+                  width: 300,
+                  child: QRView(
+                    key: qrKey,
+                    onQRViewCreated: onQRViewCreated,
+                  ),
+                ),
               ],
             )));
   }
