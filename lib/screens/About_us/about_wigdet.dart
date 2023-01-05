@@ -8,7 +8,7 @@ Widget heading(String text) {
     padding: const EdgeInsets.all(8.0),
     child: Text(
       text,
-      style: TextStyle(
+      style: const TextStyle(
           fontWeight: FontWeight.bold, fontSize: 16, color: seconderyColor),
     ),
   );
@@ -17,7 +17,7 @@ Widget heading(String text) {
 Widget paragraph(String text) {
   return Text(
     text,
-    style: TextStyle(
+    style: const TextStyle(
       fontSize: 18,
     ),
     textAlign: TextAlign.start,
@@ -34,12 +34,12 @@ Widget rowpara(
       children: [
         Text(
           heading,
-          style: TextStyle(fontWeight: FontWeight.bold, color: seconderyColor),
+          style: const TextStyle(fontWeight: FontWeight.bold, color: seconderyColor),
         ),
         spacer(12.0, 0.0),
         Text(
           text,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 16,
           ),
           textAlign: TextAlign.justify,

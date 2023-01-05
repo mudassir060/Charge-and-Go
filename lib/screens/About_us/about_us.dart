@@ -26,12 +26,13 @@ class about_us extends StatelessWidget {
           child: Column(
             // crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              heading("FWM System:"),
+              heading("Charge Go:"),
               paragraph(
-                  """* Food waste management system for restaurants and food businesses. 
-* Provides customers with real-time food waste management information.
-* Provides restaurants and food businesses with a method to effectively manage food waste in their stores.
-* Includes a mobile app that allows users to track food waste, manage donations and communicate with nonprofits."""),
+                  """Charge and go is an electric bike convenient, and sustainable to move through the 
+university. all it takes is to download its android application scan the QR code on it 
+to activate it and start your ride. You can drive everywhere within the coverage 
+area. you can easily park the Bike at a suitable location and end your trip using the 
+app. charge and go is an efficient, fun way to travel around."""),
               spacer(12.0, 0.0),
               spacer(12.0, 0.0),
               heading("Contact:"),
