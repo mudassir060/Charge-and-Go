@@ -64,53 +64,142 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final Stream<QuerySnapshot> _chargeGoStream = FirebaseFirestore.instance
+        .collection('BookRide')
+        // .orderBy('Date', descending: true)
+        .where('UID', isEqualTo: widget.UserData["UID"])
+        // .limitToLast(1)
+        .snapshots();
     var width = MediaQuery.of(context).size.width;
     return WillPopScope(
-        onWillPop: () async => false,
-        child: Scaffold(
-            drawer: MyDrawer(
-              UserData: widget.UserData,
-              AdminData: widget.AdminData,
-            ),
-            appBar: MyAppBar2(context, "Charge Go", false, () => null, false),
-            body: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                showwidget == 0
-                    ? large_button(
-                        width: 250,
-                        name: "Book a ride",
-                        function: () {
-                          setState(() {
-                            showwidget = 1;
-                          });
-                        },
-                        loading: false)
-                    : showwidget == 1
-                        ? Container(
-                            height: 300,
-                            width: 300,
-                            child: QRView(
-                              key: qrKey,
-                              onQRViewCreated: onQRViewCreated,
-                            ),
-                          )
-                        : showwidget == 2
-                            ? const loadingwidget(
+      onWillPop: () async => false,
+      child: Scaffold(
+          drawer: MyDrawer(
+            UserData: widget.UserData,
+            AdminData: widget.AdminData,
+          ),
+          appBar: MyAppBar2(context, "Charge Go", false, () => null, false),
+          body: StreamBuilder<QuerySnapshot>(
+            stream: _chargeGoStream,
+            builder:
+                (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+              if (snapshot.hasError) {
+                return Container(
+                    child: Column(
+                  children: [
+                    Text('Something went wrong'),
+                  ],
+                ));
+              }
+
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(
+                  child: loadingwidget(
+                    color: Colors.black,
+                  ),
+                );
+              }
+              if (snapshot.data?.size == 0) {
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    showwidget == 0
+                        ? large_button(
+                            width: 250,
+                            name: "Book a ride",
+                            function: () {
+                              setState(() {
+                                showwidget = 1;
+                              });
+                            },
+                            loading: false)
+                        : showwidget == 1
+                            ? Container(
+                                height: 300,
+                                width: 300,
+                                child: QRView(
+                                  key: qrKey,
+                                  onQRViewCreated: onQRViewCreated,
+                                ),
+                              )
+                            : const loadingwidget(
                                 color: Colors.black,
                               )
-                            : large_button(
-                                width: 250,
-                                name: "Stop ride",
-                                function: () {
-                                  setState(() {
-                                    showwidget = 0;
-                                  });
-                                },
-                                loading: false,
-                              )
-              ],
-            )));
+                  ],
+                );
+              }
+              return GridView.extent(
+                primary: false,
+                padding: const EdgeInsets.all(16),
+                crossAxisSpacing: 10,
+                mainAxisSpacing: 10,
+                childAspectRatio: (1 / 1.3),
+                shrinkWrap: true,
+                maxCrossAxisExtent: 300.0,
+                children: snapshot.data!.docs.map((DocumentSnapshot document) {
+                  Map<String, dynamic> data =
+                      document.data()! as Map<String, dynamic>;
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      large_button(
+                        width: 250,
+                        name: "Stop ride",
+                        function: () {
+                          setState(() {
+                            showwidget = 0;
+                          });
+                        },
+                        loading: false,
+                      )
+                    ],
+                  );
+                }).toList(),
+              );
+            },
+          )
+          // Column(
+          //   mainAxisAlignment: MainAxisAlignment.center,
+          //   crossAxisAlignment: CrossAxisAlignment.center,
+          //   children: [
+          //     showwidget == 0
+          //         ? large_button(
+          //             width: 250,
+          //             name: "Book a ride",
+          //             function: () {
+          //               setState(() {
+          //                 showwidget = 1;
+          //               });
+          //             },
+          //             loading: false)
+          //         : showwidget == 1
+          //             ? Container(
+          //                 height: 300,
+          //                 width: 300,
+          //                 child: QRView(
+          //                   key: qrKey,
+          //                   onQRViewCreated: onQRViewCreated,
+          //                 ),
+          //               )
+          //             : showwidget == 2
+          //                 ? const loadingwidget(
+          //                     color: Colors.black,
+          //                   )
+          //                 : large_button(
+          //                     width: 250,
+          //                     name: "Stop ride",
+          //                     function: () {
+          //                       setState(() {
+          //                         showwidget = 0;
+          //                       });
+          //                     },
+          //                     loading: false,
+          //                   )
+          //   ],
+          // ),
+          ),
+    );
   }
 }
