@@ -27,6 +27,8 @@ class _HomeScreenState extends State<HomeScreen> {
   QRViewController? controller;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   var showwidget = 0;
+  bool showError = false;
+  var RideData;
 
   void onQRViewCreated(QRViewController controller) {
     controller.scannedDataStream.listen((qrData) {
@@ -37,21 +39,32 @@ class _HomeScreenState extends State<HomeScreen> {
             setState(() {
               showwidget = 2;
             });
-            DateTime now = DateTime.now();
-            String formattedDate = DateFormat('dd MM yyyy HH:mm').format(now);
-            print("===========>${barcode?.code}");
-            await firestore.collection("BookRide").doc(barcode?.code).set({
-              "barcode": barcode?.code,
-              "UID": widget.UserData['UID'],
-              "username": widget.UserData["username"],
-              "email": widget.UserData["email"],
-              "rollNo": widget.UserData["rollNo"],
-              "PhoneNo": widget.UserData["PhoneNo"],
-              "BookRideTime": formattedDate,
-            });
+            final DocumentSnapshot snapshot =
+                await firestore.collection("BookRide").doc(barcode?.code).get();
+            final data = snapshot.data();
             setState(() {
-              showwidget = 3;
+              RideData = data;
             });
+            if (RideData["UID"] == null) {
+              DateTime now = DateTime.now();
+              String formattedDate = DateFormat('dd MM yyyy HH:mm').format(now);
+              await firestore.collection("BookRide").doc(barcode?.code).set({
+                "barcode": barcode?.code,
+                "UID": widget.UserData['UID'],
+                "username": widget.UserData["username"],
+                "email": widget.UserData["email"],
+                "rollNo": widget.UserData["rollNo"],
+                "PhoneNo": widget.UserData["PhoneNo"],
+                "BookRideTime": formattedDate,
+              });
+              setState(() {
+                showwidget = 0;
+              });
+            } else {
+              setState(() {
+                showError = true;
+              });
+            }
           } on FormatException {
             snackbar("Invalid QR Code!");
           } on Exception {
@@ -115,13 +128,21 @@ class _HomeScreenState extends State<HomeScreen> {
                             },
                             loading: false)
                         : showwidget == 1
-                            ? Container(
-                                height: 300,
-                                width: 300,
-                                child: QRView(
-                                  key: qrKey,
-                                  onQRViewCreated: onQRViewCreated,
-                                ),
+                            ? Column(
+                                children: [
+                                  showError
+                                      ? const Text(
+                                          "This bike is already books try again bike")
+                                      : Container(),
+                                  Container(
+                                    height: 300,
+                                    width: 300,
+                                    child: QRView(
+                                      key: qrKey,
+                                      onQRViewCreated: onQRViewCreated,
+                                    ),
+                                  ),
+                                ],
                               )
                             : const loadingwidget(
                                 color: Colors.black,
