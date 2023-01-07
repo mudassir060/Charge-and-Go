@@ -53,6 +53,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 "barcode": barcode?.code,
                 "UID": widget.UserData['UID'],
                 "username": widget.UserData["username"],
+                "condition": 1,
                 "email": widget.UserData["email"],
                 "rollNo": widget.UserData["rollNo"],
                 "PhoneNo": widget.UserData["PhoneNo"],
@@ -90,13 +91,15 @@ class _HomeScreenState extends State<HomeScreen> {
             setState(() {
               RideData = data;
             });
-            if (RideData["UID"] != null && _stoRide ==barcode?.code) {
+            print(">>>>${RideData["UID"]}>>>>${_stoRide.runtimeType}>>>>>>${barcode?.code.runtimeType}");
+            if (RideData["UID"] != null && _stoRide.toString() ==barcode?.code.toString()) {
               DateTime now = DateTime.now();
               String formattedDate = DateFormat('dd MM yyyy HH:mm').format(now);
               await firestore.collection("BookRide").doc(barcode?.code).set({
                 "barcode": barcode?.code,
-                "UID": '',
+                "UID": null,
                 "username": '',
+                "condition": '0',
                 "email": '',
                 "rollNo": '',
                 "PhoneNo": '',
@@ -241,18 +244,20 @@ class _HomeScreenState extends State<HomeScreen> {
                               Text('Booking Time: ${data["BookRideTime"]}')
                             ],
                           )
-                        : Column(
-                            children: [
-                              Container(
-                                height: 300,
-                                width: 300,
-                                child: QRView(
-                                  key: qrKey,
-                                  onQRViewCreated: rideStop,
+                        : Center(
+                          child: Column(
+                              children: [
+                                Container(
+                                  height: 300,
+                                  width: 300,
+                                  child: QRView(
+                                    key: qrKey,
+                                    onQRViewCreated: rideStop,
+                                  ),
                                 ),
-                              ),
-                            ],
-                          );
+                              ],
+                            ),
+                        );
                   }).toList(),
                 ),
               );
