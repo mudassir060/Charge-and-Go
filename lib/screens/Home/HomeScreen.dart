@@ -106,6 +106,16 @@ class _HomeScreenState extends State<HomeScreen> {
                 "PhoneNo": '',
                 "BookRideTime": formattedDate,
               });
+              await firestore.collection("History").doc().set({
+                "barcode": RideData['barcode'],
+                "UID": RideData['UID'],
+                "username": RideData["username"],
+                "email": RideData["email"],
+                "rollNo": RideData["rollNo"],
+                "PhoneNo": RideData["PhoneNo"],
+                "BookRideTime": RideData["BookRideTime"],
+                "StopRideTime": RideData["StopRideTime"],
+              });
               snackbar("Ride Cancel");
             } else {
               snackbar("Not Allow to cancel Ride");
