@@ -1,3 +1,4 @@
+import 'package:charge_go/screens/Home/widgets/userDetaileCard.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
@@ -91,8 +92,8 @@ class _HomeScreenState extends State<HomeScreen> {
             setState(() {
               RideData = data;
             });
-            print(">>>>${RideData["UID"]}>>>>${_stoRide.runtimeType}>>>>>>${barcode?.code.runtimeType}");
-            if (RideData["UID"] != null && _stoRide.toString() ==barcode?.code.toString()) {
+            if (RideData["UID"] != null &&
+                _stoRide.toString() == barcode?.code.toString()) {
               DateTime now = DateTime.now();
               String formattedDate = DateFormat('dd MM yyyy HH:mm').format(now);
               await firestore.collection("BookRide").doc(barcode?.code).set({
@@ -161,45 +162,42 @@ class _HomeScreenState extends State<HomeScreen> {
                 );
               }
               if (snapshot.data?.size == 0) {
-                return Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      showwidget == 0
-                          ? Column(
-                              children: [
-                                Text(
-                                    "Hi! Welcome ${widget.UserData["username"]}"),
-                                large_button(
-                                    width: 250,
-                                    name: "Book a ride",
-                                    function: () {
-                                      setState(() {
-                                        showwidget = 1;
-                                      });
-                                    },
-                                    loading: false),
-                              ],
-                            )
-                          : showwidget == 1
-                              ? Column(
-                                  children: [
-                                    Container(
-                                      height: 300,
-                                      width: 300,
-                                      child: QRView(
-                                        key: qrKey,
-                                        onQRViewCreated: rideBook,
-                                      ),
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    showwidget == 0
+                        ? Column(
+                            children: [
+                              userDetaileCard(UserData:widget.UserData),
+                              spacer(50.0, 0.0),
+                              large_button(
+                                  width: 250,
+                                  name: "Book a ride",
+                                  function: () {
+                                    setState(() {
+                                      showwidget = 1;
+                                    });
+                                  },
+                                  loading: false),
+                            ],
+                          )
+                        : showwidget == 1
+                            ? Column(
+                                children: [
+                                  Container(
+                                    height: 300,
+                                    width: 300,
+                                    child: QRView(
+                                      key: qrKey,
+                                      onQRViewCreated: rideBook,
                                     ),
-                                  ],
-                                )
-                              : const loadingwidget(
-                                  color: Colors.black,
-                                )
-                    ],
-                  ),
+                                  ),
+                                ],
+                              )
+                            : const loadingwidget(
+                                color: Colors.black,
+                              )
+                  ],
                 );
               }
               return Center(
@@ -211,6 +209,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       snapshot.data!.docs.map((DocumentSnapshot document) {
                     Map<String, dynamic> data =
                         document.data()! as Map<String, dynamic>;
+                    print("=============>${_stoRide}");
                     return _stoRide == 0
                         ? Column(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -225,6 +224,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                       width: 200,
                                       name: "Stop ride",
                                       function: () {
+                                        print("121=============>${_stoRide}");
+
                                         setState(() {
                                           _stoRide = int.parse(data["barcode"]);
                                         });
@@ -245,8 +246,9 @@ class _HomeScreenState extends State<HomeScreen> {
                             ],
                           )
                         : Center(
-                          child: Column(
+                            child: Column(
                               children: [
+                                spacer(100.0, 0.0),
                                 Container(
                                   height: 300,
                                   width: 300,
@@ -257,7 +259,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                               ],
                             ),
-                        );
+                          );
                   }).toList(),
                 ),
               );
