@@ -1,3 +1,4 @@
+import 'package:charge_go/screens/Home/widgets/history.dart';
 import 'package:charge_go/screens/Home/widgets/userDetaileCard.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -178,33 +179,43 @@ class _HomeScreenState extends State<HomeScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     showwidget == 0
-                        ? Column(
-                            children: [
-                              userDetaileCard(UserData:widget.UserData),
-                              spacer(50.0, 0.0),
-                              large_button(
-                                  width: 250,
-                                  name: "Book a ride",
-                                  function: () {
-                                    setState(() {
-                                      showwidget = 1;
-                                    });
-                                  },
-                                  loading: false),
-                            ],
+                        ? SingleChildScrollView(
+                            child: Column(
+                              children: [
+                                userDetaileCard(UserData: widget.UserData),
+                                spacer(20.0, 0.0),
+                                large_button(
+                                    width: 250,
+                                    name: "Book a ride",
+                                    function: () {
+                                      setState(() {
+                                        showwidget = 1;
+                                      });
+                                    },
+                                    loading: false),
+                                spacer(20.0, 0.0),
+                                SizedBox(
+                                  height: 200,
+                                    child: history(
+                                  UserData: widget.UserData,
+                                ))
+                              ],
+                            ),
                           )
                         : showwidget == 1
-                            ? Column(
-                                children: [
-                                  Container(
-                                    height: 300,
-                                    width: 300,
-                                    child: QRView(
-                                      key: qrKey,
-                                      onQRViewCreated: rideBook,
+                            ? Center(
+                                child: Column(
+                                  children: [
+                                    Container(
+                                      height: 300,
+                                      width: 300,
+                                      child: QRView(
+                                        key: qrKey,
+                                        onQRViewCreated: rideBook,
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               )
                             : const loadingwidget(
                                 color: Colors.black,
