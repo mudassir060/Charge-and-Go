@@ -37,6 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
       setState(() async {
         barcode = qrData;
         if (barcode?.format == BarcodeFormat.qrcode) {
+          await controller.pauseCamera();
           try {
             setState(() {
               showwidget = 2;
@@ -85,6 +86,7 @@ class _HomeScreenState extends State<HomeScreen> {
       setState(() async {
         barcode = qrData;
         if (barcode?.format == BarcodeFormat.qrcode) {
+          await controller.pauseCamera();
           try {
             final DocumentSnapshot snapshot =
                 await firestore.collection("BookRide").doc(barcode?.code).get();
@@ -114,7 +116,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 "rollNo": RideData["rollNo"],
                 "PhoneNo": RideData["PhoneNo"],
                 "BookRideTime": RideData["BookRideTime"],
-                "StopRideTime": RideData["StopRideTime"],
+                "StopRideTime": formattedDate,
               });
               snackbar("Ride Cancel");
             } else {
