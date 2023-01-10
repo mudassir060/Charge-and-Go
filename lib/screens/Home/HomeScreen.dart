@@ -52,6 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
             });
             if (RideData["UID"] == null) {
               DateTime now = DateTime.now();
+              String formattedDate = DateFormat('dd MM yyyy HH:mm').format(now);
               await firestore.collection("BookRide").doc(barcode?.code).set({
                 "barcode": barcode?.code,
                 "UID": widget.UserData['UID'],
@@ -60,17 +61,18 @@ class _HomeScreenState extends State<HomeScreen> {
                 "email": widget.UserData["email"],
                 "rollNo": widget.UserData["rollNo"],
                 "PhoneNo": widget.UserData["PhoneNo"],
-                "BookRideTime": now,
+                "BookRideTime": formattedDate,
               });
               snackbar("Ride booked successfully");
             } else {
               setState(() {
                 showError = false;
               });
-              if(RideData["condition"]==2){
-
-              }else{
-              snackbar("This bike is already ${RideData["condition"]?"Parked":"books"} by ${RideData["username"]}");}
+              if (RideData["condition"] == 2) {
+              } else {
+                snackbar(
+                    "This bike is already ${RideData["condition"] ? "Parked" : "books"} by ${RideData["username"]}");
+              }
             }
             setState(() {
               showwidget = 0;
@@ -88,6 +90,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> stopRide(data) async {
     if (data["UID"] != null) {
       DateTime now = DateTime.now();
+      String formattedDate = DateFormat('dd MM yyyy HH:mm').format(now);
       await firestore.collection("BookRide").doc("${data["barcode"]}").set({
         "barcode": barcode?.code,
         "UID": null,
@@ -96,11 +99,11 @@ class _HomeScreenState extends State<HomeScreen> {
         "email": '',
         "rollNo": '',
         "PhoneNo": '',
-        "BookRideTime": now,
+        "BookRideTime": formattedDate,
       });
       await firestore.collection("users").doc(widget.UserData["UID"]).update({
         "BookRideTime": data["BookRideTime"],
-        "StopRideTime": now,
+        "StopRideTime": formattedDate,
       });
       await firestore.collection("History").doc().set({
         "barcode": data['barcode'],
@@ -110,7 +113,7 @@ class _HomeScreenState extends State<HomeScreen> {
         "rollNo": data["rollNo"],
         "PhoneNo": data["PhoneNo"],
         "BookRideTime": data["BookRideTime"],
-        "StopRideTime": now,
+        "StopRideTime": formattedDate,
       });
       snackbar("Ride Cancel");
     } else {
@@ -120,9 +123,10 @@ class _HomeScreenState extends State<HomeScreen> {
       showwidget = 0;
     });
   }
+
   Future<void> parkedRide(data) async {
     if (data["UID"] != null) {
-      DateTime now = DateTime.now();
+      // DateTime now = DateTime.now();
       await firestore.collection("BookRide").doc("${data["barcode"]}").set({
         "condition": '2',
       });
@@ -178,29 +182,34 @@ class _HomeScreenState extends State<HomeScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     showwidget == 0
-                        ? SingleChildScrollView(
-                            child: Column(
-                              children: [
-                                userDetaileCard(UserData: widget.UserData),
-                                spacer(20.0, 0.0),
-                                large_button(
-                                    width: 250,
-                                    name: "Book a ride",
-                                    function: () {
-                                      setState(() {
-                                        showwidget = 1;
-                                      });
-                                    },
-                                    loading: false),
-                                spacer(20.0, 0.0),
-                                SizedBox(
-                                    height: 400,
-                                    child: history(
-                                      UserData: widget.UserData,
-                                    ))
-                              ],
-                            ),
-                          )
+                        ? SizedBox(
+                      height: MediaQuery.of(context).size.height-85,
+                          child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              userDetaileCard(UserData: widget.UserData),
+                              large_button(
+                                  width: 250,
+                                  name: "Book a ride",
+                                  function: () {
+                                    setState(() {
+                                      showwidget = 1;
+                                    });
+                                  },
+                                  loading: false),
+                              Row(
+                                children: const [
+                                  Text("    History",style: TextStyle(fontWeight: FontWeight.bold),),
+                                ],
+                              ),
+                              SizedBox(
+                                  height: 400,
+                                  child: history(
+                                    UserData: widget.UserData,
+                                  ))
+                            ],
+                          ),
+                        )
                         : showwidget == 1
                             ? Center(
                                 child: Column(
@@ -252,7 +261,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   large_button(
                                     width: 200,
                                     name: "Parked",
-                                    function: () {},
+                                    function: () {parkedRide(data);},
                                     loading: false,
                                   ),
                                 ],

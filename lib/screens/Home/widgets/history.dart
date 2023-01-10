@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../../../constants/icons.dart';
+import '../../../constants/images.dart';
 import '../../../constants/style.dart';
 import '../../../widgets/loadingwidget.dart';
 import '../../../widgets/spacer.dart';
@@ -57,7 +57,7 @@ class _historyState extends State<history> {
                 document.data()! as Map<String, dynamic>;
             return Container(
               padding: const EdgeInsets.all(10),
-              margin: const EdgeInsets.all(10),
+              margin: const EdgeInsets.only(left:10, right: 10,top:10),
               decoration: BoxDecoration(
                   color: active,
                   border: Border.all(color: Colors.grey.shade300),
@@ -66,7 +66,7 @@ class _historyState extends State<history> {
                 children: [
                   const CircleAvatar(
                     radius: 30,
-                    backgroundImage: AssetImage(sellerIcon),
+                    backgroundImage: AssetImage(logo),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(left: 8.0),

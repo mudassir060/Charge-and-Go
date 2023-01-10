@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../constants/icons.dart';
 import '../../../constants/style.dart';
 import '../../../widgets/spacer.dart';
+import 'package:intl/intl.dart';
 
 class userDetaileCard extends StatelessWidget {
   final Map UserData;
@@ -24,6 +25,20 @@ class userDetaileCard extends StatelessWidget {
     // print("================>${DateTime.parse(UserData["BookRideTime"])}");
     // print("================>${DateTime.parse(UserData["StopRideTime"])}");
 
+    String start_time = UserData["BookRideTime"].toString(); // or if '24:00'
+    String end_time = UserData["StopRideTime"].toString(); // or if '12:00
+
+    var format = DateFormat("dd MM yyyy HH:mm");
+    var start = format.parse(start_time);
+    var end = format.parse(end_time);
+    var hour = end.difference(start).inHours;
+    var min = end.difference(start).inMinutes;
+    var time;
+    if (hour >= 1) {
+      time = "$hour hr";
+    } else {
+      time = "$min min";
+    }
     return Container(
       padding: const EdgeInsets.all(10),
       margin: const EdgeInsets.all(10),
@@ -51,16 +66,15 @@ class userDetaileCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    greeting(),
+                    greeting().toUpperCase(),
                     style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                   ),
                   Text(
-                    "Hi! Welcome ${UserData["username"]}",
+                    "         ${UserData["username"]}".toUpperCase(),
                     style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                   ),
-                  spacer(10.0, 0.0),
                   Text(
-                    "(${UserData["rollNo"]})",
+                    "                    (${UserData["rollNo"]})",
                     style: TextStyle(fontSize: 15),
                   ),
                   Container(
@@ -75,13 +89,15 @@ class userDetaileCard extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         Icon(Icons.access_time_sharp),
-                        Text("${UserData["lastRideTime"]}"),
+                        spacer(0.0, 10.0),
+                        Text("$time"),
                         spacer(0.0, 100.0),
                         Icon(Icons.directions_bike_sharp),
+                        spacer(0.0, 10.0),
                         Text("data"),
                       ],
                     ),
-                  )
+                  ),
                 ],
               ),
             ],
