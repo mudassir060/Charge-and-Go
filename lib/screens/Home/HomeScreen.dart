@@ -52,7 +52,6 @@ class _HomeScreenState extends State<HomeScreen> {
             });
             if (RideData["UID"] == null) {
               DateTime now = DateTime.now();
-              String formattedDate = DateFormat('dd MM yyyy HH:mm').format(now);
               await firestore.collection("BookRide").doc(barcode?.code).set({
                 "barcode": barcode?.code,
                 "UID": widget.UserData['UID'],
@@ -61,7 +60,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 "email": widget.UserData["email"],
                 "rollNo": widget.UserData["rollNo"],
                 "PhoneNo": widget.UserData["PhoneNo"],
-                "BookRideTime": formattedDate,
+                "BookRideTime": now,
               });
               snackbar("Ride booked successfully");
             } else {
@@ -89,7 +88,6 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> stopRide(data) async {
     if (data["UID"] != null) {
       DateTime now = DateTime.now();
-      String formattedDate = DateFormat('dd MM yyyy HH:mm').format(now);
       await firestore.collection("BookRide").doc("${data["barcode"]}").set({
         "barcode": barcode?.code,
         "UID": null,
@@ -98,11 +96,11 @@ class _HomeScreenState extends State<HomeScreen> {
         "email": '',
         "rollNo": '',
         "PhoneNo": '',
-        "BookRideTime": formattedDate,
+        "BookRideTime": now,
       });
-      final difference = DateTime.parse(data["BookRideTime"]).difference(now).inHours;
-      await firestore.collection("users").doc(widget.UserData["UID"]).set({
-        "lastRideTime": '$difference',
+      await firestore.collection("users").doc(widget.UserData["UID"]).update({
+        "BookRideTime": data["BookRideTime"],
+        "StopRideTime": now,
       });
       await firestore.collection("History").doc().set({
         "barcode": data['barcode'],
@@ -112,7 +110,7 @@ class _HomeScreenState extends State<HomeScreen> {
         "rollNo": data["rollNo"],
         "PhoneNo": data["PhoneNo"],
         "BookRideTime": data["BookRideTime"],
-        "StopRideTime": formattedDate,
+        "StopRideTime": now,
       });
       snackbar("Ride Cancel");
     } else {
@@ -125,7 +123,6 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> parkedRide(data) async {
     if (data["UID"] != null) {
       DateTime now = DateTime.now();
-      String formattedDate = DateFormat('dd MM yyyy HH:mm').format(now);
       await firestore.collection("BookRide").doc("${data["barcode"]}").set({
         "condition": '2',
       });
@@ -208,6 +205,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             ? Center(
                                 child: Column(
                                   children: [
+                                    spacer(100.0, 0.0),
                                     Container(
                                       height: 300,
                                       width: 300,

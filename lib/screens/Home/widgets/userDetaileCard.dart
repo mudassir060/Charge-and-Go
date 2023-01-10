@@ -14,13 +14,15 @@ class userDetaileCard extends StatelessWidget {
     String greeting() {
       var hour = DateTime.now().hour;
       if (hour < 12) {
-        return 'Morning.';
+        return 'Good Morning.';
       }
       if (hour < 17) {
-        return 'Afternoon.';
+        return 'Good Afternoon.';
       }
-      return 'Evening.';
+      return 'Good Evening.';
     }
+    // print("================>${DateTime.parse(UserData["BookRideTime"])}");
+    // print("================>${DateTime.parse(UserData["StopRideTime"])}");
 
     return Container(
       padding: const EdgeInsets.all(10),
@@ -73,7 +75,7 @@ class userDetaileCard extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         Icon(Icons.access_time_sharp),
-                        Text("data"),
+                        Text("${UserData["lastRideTime"]}"),
                         spacer(0.0, 100.0),
                         Icon(Icons.directions_bike_sharp),
                         Text("data"),
