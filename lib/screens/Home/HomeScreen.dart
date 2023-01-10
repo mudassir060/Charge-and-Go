@@ -31,6 +31,7 @@ class _HomeScreenState extends State<HomeScreen> {
   var _stoRide = 0;
 
   bool showError = true;
+
   var RideData;
 
   void rideBook(QRViewController controller) {
@@ -67,7 +68,10 @@ class _HomeScreenState extends State<HomeScreen> {
               setState(() {
                 showError = false;
               });
-              snackbar("This bike is already books try again bike");
+              if(RideData["condition"]==2){
+
+              }else{
+              snackbar("This bike is already ${RideData["condition"]?"Parked":"books"} by ${RideData["username"]}");}
             }
             setState(() {
               showwidget = 0;
@@ -82,57 +86,55 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  void rideStop(QRViewController controller) {
-    controller.scannedDataStream.listen((qrData) {
-      setState(() async {
-        barcode = qrData;
-        if (barcode?.format == BarcodeFormat.qrcode) {
-          await controller.pauseCamera();
-          try {
-            final DocumentSnapshot snapshot =
-                await firestore.collection("BookRide").doc(barcode?.code).get();
-            final data = snapshot.data();
-            setState(() {
-              RideData = data;
-            });
-            if (RideData["UID"] != null &&
-                _stoRide.toString() == barcode?.code.toString()) {
-              DateTime now = DateTime.now();
-              String formattedDate = DateFormat('dd MM yyyy HH:mm').format(now);
-              await firestore.collection("BookRide").doc(barcode?.code).set({
-                "barcode": barcode?.code,
-                "UID": null,
-                "username": '',
-                "condition": '0',
-                "email": '',
-                "rollNo": '',
-                "PhoneNo": '',
-                "BookRideTime": formattedDate,
-              });
-              await firestore.collection("History").doc().set({
-                "barcode": RideData['barcode'],
-                "UID": RideData['UID'],
-                "username": RideData["username"],
-                "email": RideData["email"],
-                "rollNo": RideData["rollNo"],
-                "PhoneNo": RideData["PhoneNo"],
-                "BookRideTime": RideData["BookRideTime"],
-                "StopRideTime": formattedDate,
-              });
-              snackbar("Ride Cancel");
-            } else {
-              snackbar("Not Allow to cancel Ride");
-            }
-            setState(() {
-              showwidget = 0;
-            });
-          } on FormatException {
-            snackbar("Invalid QR Code!");
-          } on Exception {
-            snackbar("Error!");
-          }
-        }
+  Future<void> stopRide(data) async {
+    if (data["UID"] != null) {
+      DateTime now = DateTime.now();
+      String formattedDate = DateFormat('dd MM yyyy HH:mm').format(now);
+      await firestore.collection("BookRide").doc("${data["barcode"]}").set({
+        "barcode": barcode?.code,
+        "UID": null,
+        "username": '',
+        "condition": '0',
+        "email": '',
+        "rollNo": '',
+        "PhoneNo": '',
+        "BookRideTime": formattedDate,
       });
+      final difference = DateTime.parse(data["BookRideTime"]).difference(now).inHours;
+      await firestore.collection("users").doc(widget.UserData["UID"]).set({
+        "lastRideTime": '$difference',
+      });
+      await firestore.collection("History").doc().set({
+        "barcode": data['barcode'],
+        "UID": data['UID'],
+        "username": data["username"],
+        "email": data["email"],
+        "rollNo": data["rollNo"],
+        "PhoneNo": data["PhoneNo"],
+        "BookRideTime": data["BookRideTime"],
+        "StopRideTime": formattedDate,
+      });
+      snackbar("Ride Cancel");
+    } else {
+      snackbar("Not Allow to cancel Ride");
+    }
+    setState(() {
+      showwidget = 0;
+    });
+  }
+  Future<void> parkedRide(data) async {
+    if (data["UID"] != null) {
+      DateTime now = DateTime.now();
+      String formattedDate = DateFormat('dd MM yyyy HH:mm').format(now);
+      await firestore.collection("BookRide").doc("${data["barcode"]}").set({
+        "condition": '2',
+      });
+      snackbar("Ride Parked");
+    } else {
+      snackbar("Not Allow to Parked Ride");
+    }
+    setState(() {
+      showwidget = 0;
     });
   }
 
@@ -195,10 +197,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                     loading: false),
                                 spacer(20.0, 0.0),
                                 SizedBox(
-                                  height: 200,
+                                    height: 400,
                                     child: history(
-                                  UserData: widget.UserData,
-                                ))
+                                      UserData: widget.UserData,
+                                    ))
                               ],
                             ),
                           )
@@ -232,7 +234,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       snapshot.data!.docs.map((DocumentSnapshot document) {
                     Map<String, dynamic> data =
                         document.data()! as Map<String, dynamic>;
-                    print("=============>${_stoRide}");
                     return _stoRide == 0
                         ? Column(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -247,11 +248,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       width: 200,
                                       name: "Stop ride",
                                       function: () {
-                                        print("121=============>${_stoRide}");
-
-                                        setState(() {
-                                          _stoRide = int.parse(data["barcode"]);
-                                        });
+                                        stopRide(data);
                                       },
                                       loading: false),
                                   large_button(
@@ -268,21 +265,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               Text('Booking Time: ${data["BookRideTime"]}')
                             ],
                           )
-                        : Center(
-                            child: Column(
-                              children: [
-                                spacer(100.0, 0.0),
-                                Container(
-                                  height: 300,
-                                  width: 300,
-                                  child: QRView(
-                                    key: qrKey,
-                                    onQRViewCreated: rideStop,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          );
+                        : Center();
                   }).toList(),
                 ),
               );
