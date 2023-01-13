@@ -2,6 +2,7 @@ import 'package:charge_go/screens/Home/widgets/history.dart';
 import 'package:charge_go/screens/Home/widgets/userDetaileCard.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:intl/intl.dart';
 import '../../widgets/app_bar/my_app_bar_2.dart';
@@ -32,6 +33,27 @@ class _HomeScreenState extends State<HomeScreen> {
 
   var RideData;
 
+  Future<Position> _getCurrentLocation() async {
+    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      return Future.error('Location services are disabled.');
+    }
+
+    LocationPermission permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return Future.error('Location permissions are denied');
+      }
+    }
+    if (permission == LocationPermission.deniedForever) {
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
+
+    return await Geolocator.getCurrentPosition();
+  }
+
   void rideBook(QRViewController controller) {
     controller.scannedDataStream.listen((qrData) {
       setState(() async {
@@ -48,24 +70,35 @@ class _HomeScreenState extends State<HomeScreen> {
             setState(() {
               RideData = data;
             });
-            if (RideData["UID"] == null) {
-              DateTime now = DateTime.now();
-              String formattedDate = DateFormat('dd MM yyyy HH:mm').format(now);
-              await firestore.collection("BookRide").doc(barcode?.code).set({
-                "barcode": barcode?.code,
-                "UID": widget.UserData['UID'],
-                "username": widget.UserData["username"],
-                "condition": 1,
-                "email": widget.UserData["email"],
-                "rollNo": widget.UserData["rollNo"],
-                "PhoneNo": widget.UserData["PhoneNo"],
-                "BookRideTime": formattedDate,
-              });
-              snackbar("Ride booked successfully");
-            } else {
-              snackbar(
-                  "This bike is already ${RideData["condition"] == 2? "Parked" : "books"} by ${RideData["username"]}");
-            }
+            DateTime now = DateTime.now();
+            String formattedDate = DateFormat('dd MM yyyy HH:mm').format(now);
+
+            _getCurrentLocation().then((value) async => {
+                  if (RideData["UID"] == null)
+                    {
+                      await firestore
+                          .collection("BookRide")
+                          .doc(barcode?.code)
+                          .set({
+                        "startLatitude": value.latitude,
+                        "startLongitude": value.longitude,
+                        "barcode": barcode?.code,
+                        "UID": widget.UserData['UID'],
+                        "username": widget.UserData["username"],
+                        "condition": 1,
+                        "email": widget.UserData["email"],
+                        "rollNo": widget.UserData["rollNo"],
+                        "PhoneNo": widget.UserData["PhoneNo"],
+                        "BookRideTime": formattedDate,
+                      }),
+                      snackbar("Ride booked successfully"),
+                    }
+                  else
+                    {
+                      snackbar(
+                          "This bike is already ${RideData["condition"] == 2 ? "Parked" : "books"} by ${RideData["username"]}")
+                    }
+                });
             setState(() {
               showwidget = 0;
             });
@@ -84,14 +117,7 @@ class _HomeScreenState extends State<HomeScreen> {
       DateTime now = DateTime.now();
       String formattedDate = DateFormat('dd MM yyyy HH:mm').format(now);
       await firestore.collection("BookRide").doc("${data["barcode"]}").set({
-        "barcode": barcode?.code,
-        "UID": null,
-        "username": '',
-        "condition": 0,
-        "email": '',
-        "rollNo": '',
-        "PhoneNo": '',
-        "BookRideTime": formattedDate,
+        "barcode": data["barcode"],
       });
       await firestore.collection("users").doc(widget.UserData["UID"]).update({
         "BookRideTime": data["BookRideTime"],
@@ -122,9 +148,35 @@ class _HomeScreenState extends State<HomeScreen> {
       await firestore.collection("BookRide").doc("${data["barcode"]}").update({
         "condition": 2,
       });
+      _getCurrentLocation().then((value) async => {
+            await firestore
+                .collection("users")
+                .doc(widget.UserData["UID"])
+                .update({
+              "startLatitude": data["startLatitude"],
+              "startLongitude": data["startLongitude"],
+              "endLatitude": value.latitude,
+              "endLongitude": value.longitude,
+            })
+          });
       snackbar("Ride Parked");
     } else {
       snackbar("Not Allow to Parked Ride");
+    }
+    setState(() {
+      showwidget = 0;
+    });
+  }
+
+  Future<void> unparkedRide(data) async {
+    if (data["UID"] != null) {
+      // DateTime now = DateTime.now();
+      await firestore.collection("BookRide").doc("${data["barcode"]}").update({
+        "condition": 1,
+      });
+      snackbar("Ride UnParked");
+    } else {
+      snackbar("Not Allow to UnParked Ride");
     }
     setState(() {
       showwidget = 0;
@@ -254,14 +306,21 @@ class _HomeScreenState extends State<HomeScreen> {
                                         stopRide(data);
                                       },
                                       loading: false),
-                                  large_button(
+                               data["condition"]==2?   large_button(
                                     width: 200,
                                     name: "Parked",
                                     function: () {
-                                      parkedRide(data);
+                                      unparkedRide(data);
                                     },
                                     loading: false,
-                                  ),
+                                  ): large_button(
+                                 width: 200,
+                                 name: "Unparked",
+                                 function: () {
+                                   unparkedRide(data);
+                                 },
+                                 loading: false,
+                               ),
                                 ],
                               ),
                               spacer(10.0, 0.0),

@@ -1,5 +1,4 @@
 import 'package:charge_go/screens/Home/HomeScreen.dart';
-import 'package:charge_go/screens/Home/location.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';

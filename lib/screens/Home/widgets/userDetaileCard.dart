@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import '../../../constants/icons.dart';
 import '../../../constants/style.dart';
 import '../../../widgets/spacer.dart';
@@ -85,16 +86,25 @@ class userDetaileCard extends StatelessWidget {
                         border: Border.all(color: Colors.grey.shade300),
                         borderRadius: BorderRadius.circular(10)),
                     child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        Icon(Icons.access_time_sharp),
+                        const Icon(Icons.access_time_sharp),
                         spacer(0.0, 10.0),
                         Text("$time"),
                         spacer(0.0, 100.0),
-                        Icon(Icons.directions_bike_sharp),
+                        const Icon(Icons.directions_bike_sharp),
                         spacer(0.0, 10.0),
-                        Text("data"),
+                        UserData["startLatitude"] != null &&
+                                UserData["startLongitude"] != null &&
+                                UserData["endLatitude"] != null &&
+                                UserData["endLongitude"] != null
+                            ? Text(Geolocator.distanceBetween(
+                                UserData["startLatitude"],
+                                UserData["startLongitude"],
+                                UserData["endLatitude"],
+                                UserData["endLongitude"],
+                              ).toString())
+                            : const Text("0"),
                       ],
                     ),
                   ),

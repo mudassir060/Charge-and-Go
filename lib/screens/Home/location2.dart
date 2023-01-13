@@ -80,11 +80,13 @@ class _geolocationState extends State<geolocation> {
               onPressed: () => _getCurrentLocation().then((value) => {
                 latitude = value.latitude.toString(),
                 longitude = value.longitude.toString(),
+                print(latitude),
+                print(longitude),
                 setState(() {
                   locationMessage = 'Location: $latitude, $longitude';
                 }),
 
-                  _liveLocaiton(),
+                  // _liveLocaiton(),
                 // _openMap(latitude,longitude)
               }),
               child: const Text('Get Location'),
