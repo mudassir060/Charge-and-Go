@@ -306,21 +306,23 @@ class _HomeScreenState extends State<HomeScreen> {
                                         stopRide(data);
                                       },
                                       loading: false),
-                               data["condition"]==2?   large_button(
-                                    width: 200,
-                                    name: "Parked",
-                                    function: () {
-                                      unparkedRide(data);
-                                    },
-                                    loading: false,
-                                  ): large_button(
-                                 width: 200,
-                                 name: "Unparked",
-                                 function: () {
-                                   unparkedRide(data);
-                                 },
-                                 loading: false,
-                               ),
+                                  data["condition"] != 2
+                                      ? large_button(
+                                          width: 200,
+                                          name: "Parked",
+                                          function: () {
+                                            parkedRide(data);
+                                          },
+                                          loading: false,
+                                        )
+                                      : large_button(
+                                          width: 200,
+                                          name: "Unparked",
+                                          function: () {
+                                            unparkedRide(data);
+                                          },
+                                          loading: false,
+                                        ),
                                 ],
                               ),
                               spacer(10.0, 0.0),

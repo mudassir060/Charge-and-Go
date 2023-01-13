@@ -103,8 +103,8 @@ class userDetaileCard extends StatelessWidget {
                                 UserData["startLongitude"],
                                 UserData["endLatitude"],
                                 UserData["endLongitude"],
-                              ).toString())
-                            : const Text("0"),
+                              ).toString().substring(0,5))
+                            : const Text("Null"),
                       ],
                     ),
                   ),
