@@ -64,6 +64,8 @@ class _Signup_screenState extends State<Signup_screen> {
           "PhoneNo": PhoneNo,
           "password": userpassword,
           "JoinDate": formattedDate,
+          "BookRideTime": formattedDate,
+          "StopRideTime": formattedDate,
         });
 
         Navigator.push(

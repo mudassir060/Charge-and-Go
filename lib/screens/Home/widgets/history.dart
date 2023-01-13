@@ -15,7 +15,6 @@ class history extends StatefulWidget {
   @override
   State<history> createState() => _historyState();
 }
-
 class _historyState extends State<history> {
   @override
   Widget build(BuildContext context) {

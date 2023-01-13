@@ -30,8 +30,6 @@ class _HomeScreenState extends State<HomeScreen> {
   var showwidget = 0;
   var _stoRide = 0;
 
-  bool showError = true;
-
   var RideData;
 
   void rideBook(QRViewController controller) {
@@ -65,14 +63,8 @@ class _HomeScreenState extends State<HomeScreen> {
               });
               snackbar("Ride booked successfully");
             } else {
-              setState(() {
-                showError = false;
-              });
-              if (RideData["condition"] == 2) {
-              } else {
-                snackbar(
-                    "This bike is already ${RideData["condition"] ? "Parked" : "books"} by ${RideData["username"]}");
-              }
+              snackbar(
+                  "This bike is already ${RideData["condition"] == 2? "Parked" : "books"} by ${RideData["username"]}");
             }
             setState(() {
               showwidget = 0;
@@ -95,7 +87,7 @@ class _HomeScreenState extends State<HomeScreen> {
         "barcode": barcode?.code,
         "UID": null,
         "username": '',
-        "condition": '0',
+        "condition": 0,
         "email": '',
         "rollNo": '',
         "PhoneNo": '',
@@ -127,8 +119,8 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> parkedRide(data) async {
     if (data["UID"] != null) {
       // DateTime now = DateTime.now();
-      await firestore.collection("BookRide").doc("${data["barcode"]}").set({
-        "condition": '2',
+      await firestore.collection("BookRide").doc("${data["barcode"]}").update({
+        "condition": 2,
       });
       snackbar("Ride Parked");
     } else {
@@ -183,33 +175,37 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     showwidget == 0
                         ? SizedBox(
-                      height: MediaQuery.of(context).size.height-85,
-                          child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              userDetaileCard(UserData: widget.UserData),
-                              large_button(
-                                  width: 250,
-                                  name: "Book a ride",
-                                  function: () {
-                                    setState(() {
-                                      showwidget = 1;
-                                    });
-                                  },
-                                  loading: false),
-                              Row(
-                                children: const [
-                                  Text("    History",style: TextStyle(fontWeight: FontWeight.bold),),
-                                ],
-                              ),
-                              SizedBox(
-                                  height: 400,
-                                  child: history(
-                                    UserData: widget.UserData,
-                                  ))
-                            ],
-                          ),
-                        )
+                            height: MediaQuery.of(context).size.height - 85,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                userDetaileCard(UserData: widget.UserData),
+                                large_button(
+                                    width: 250,
+                                    name: "Book a ride",
+                                    function: () {
+                                      setState(() {
+                                        showwidget = 1;
+                                      });
+                                    },
+                                    loading: false),
+                                Row(
+                                  children: const [
+                                    Text(
+                                      "    History",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(
+                                    height: 400,
+                                    child: history(
+                                      UserData: widget.UserData,
+                                    ))
+                              ],
+                            ),
+                          )
                         : showwidget == 1
                             ? Center(
                                 child: Column(
@@ -261,7 +257,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                   large_button(
                                     width: 200,
                                     name: "Parked",
-                                    function: () {parkedRide(data);},
+                                    function: () {
+                                      parkedRide(data);
+                                    },
                                     loading: false,
                                   ),
                                 ],

@@ -1,4 +1,5 @@
 import 'package:charge_go/screens/Home/HomeScreen.dart';
+import 'package:charge_go/screens/Home/location.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
@@ -50,22 +51,22 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     FlutterNativeSplash.remove();
     return GetMaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Uet Services',
-        theme: ThemeData(
-          primarySwatch: Colors.orange,
-        ),
-        // home: OnBoardingScreen(UserData: {}, AdminData: {},),
-        // home: upload_data(),
-        home: AdminData["Version"][0]
-            ? UID != "null"
-                ? HomeScreen(
-                    UserData: UserData,
-                    AdminData: AdminData,
-                  )
-                : login_screen(
-                    admindata: AdminData,
-                  )
-            : Expire(url: "${AdminData["apkUrl"]}"));
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        primarySwatch: Colors.orange,
+      ),
+      // home: OnBoardingScreen(UserData: {}, AdminData: {},),
+      // home: upload_data(),
+      home: AdminData["Version"][0]
+          ? UID != "null"
+              ? HomeScreen(
+                  UserData: UserData,
+                  AdminData: AdminData,
+                )
+              : login_screen(
+                  admindata: AdminData,
+                )
+          : Expire(url: "${AdminData["apkUrl"]}"),
+    );
   }
 }
