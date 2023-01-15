@@ -1,7 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
+import 'package:geolocator/geolocator.dart';
+import 'package:intl/intl.dart';
 import '../../../constants/images.dart';
 import '../../../constants/style.dart';
 import '../../../widgets/loadingwidget.dart';
@@ -15,14 +16,15 @@ class history extends StatefulWidget {
   @override
   State<history> createState() => _historyState();
 }
+
 class _historyState extends State<history> {
   @override
   Widget build(BuildContext context) {
     final Stream<QuerySnapshot> _historyStream = FirebaseFirestore.instance
         .collection('History')
-    // .orderBy('Date', descending: true)
+        // .orderBy('Date', descending: true)
         .where('UID', isEqualTo: widget.UserData["UID"])
-    // .limitToLast(2)l
+        // .limitToLast(2)l
         .snapshots();
     return Scaffold(
         body: StreamBuilder<QuerySnapshot>(
@@ -31,7 +33,7 @@ class _historyState extends State<history> {
         if (snapshot.hasError) {
           return Column(
             children: const [
-          Text('Something went wrong'),
+              Text('Something went wrong'),
             ],
           );
         }
@@ -54,9 +56,23 @@ class _historyState extends State<history> {
           children: snapshot.data!.docs.map((DocumentSnapshot document) {
             Map<String, dynamic> data =
                 document.data()! as Map<String, dynamic>;
+            String start_time = data["BookRideTime"].toString(); // or if '24:00'
+            String end_time = data["StopRideTime"].toString(); // or if '12:00
+
+            var format = DateFormat("dd MM yyyy HH:mm");
+            var start = format.parse(start_time);
+            var end = format.parse(end_time);
+            var hour = end.difference(start).inHours;
+            var min = end.difference(start).inMinutes;
+            var time;
+            if (hour >= 1) {
+              time = "$hour hr";
+            } else {
+              time = "$min min";
+            }
             return Container(
               padding: const EdgeInsets.all(10),
-              margin: const EdgeInsets.only(left:10, right: 10,top:10),
+              margin: const EdgeInsets.only(left: 10, right: 10, top: 10),
               decoration: BoxDecoration(
                   color: active,
                   border: Border.all(color: Colors.grey.shade300),
@@ -73,9 +89,22 @@ class _historyState extends State<history> {
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("Qr No: ${data['barcode']}"),spacer(5.0,0.0),
-                        Text("Booked Time: ${data['BookRideTime']}"),spacer(5.0,0.0),
-                        Text("End Time: ${data['StopRideTime']}"),spacer(5.0,0.0),
+                        Text("Qr No: ${data['barcode']}"),
+                        spacer(5.0, 0.0),
+                        data["startLatitude"] != null &&
+                                data["startLongitude"] != null &&
+                                data["endLatitude"] != null &&
+                                data["endLongitude"] != null
+                            ? Text("Distance: ${Geolocator.distanceBetween(
+                                data["startLatitude"],
+                                data["startLongitude"],
+                                data["endLatitude"],
+                                data["endLongitude"],
+                              ).toString().substring(0, 5)}")
+                            : const Text("Null"),
+                        spacer(5.0, 0.0),
+                        Text("Time: $time"),
+                        spacer(5.0, 0.0),
                       ],
                     ),
                   ),

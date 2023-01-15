@@ -62,6 +62,7 @@ class userDetaileCard extends StatelessWidget {
                     backgroundImage: NetworkImage(UserData["UserProfile"])),
           ),
           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
