@@ -123,16 +123,22 @@ class _HomeScreenState extends State<HomeScreen> {
         "BookRideTime": data["BookRideTime"],
         "StopRideTime": formattedDate,
       });
-      await firestore.collection("History").doc().set({
-        "barcode": data['barcode'],
-        "UID": data['UID'],
-        "username": data["username"],
-        "email": data["email"],
-        "rollNo": data["rollNo"],
-        "PhoneNo": data["PhoneNo"],
-        "BookRideTime": data["BookRideTime"],
-        "StopRideTime": formattedDate,
-      });
+      _getCurrentLocation().then((value) async => {
+            await firestore.collection("History").doc().set({
+              "barcode": data['barcode'],
+              "UID": data['UID'],
+              "username": data["username"],
+              "email": data["email"],
+              "rollNo": data["rollNo"],
+              "PhoneNo": data["PhoneNo"],
+              "BookRideTime": data["BookRideTime"],
+              "StopRideTime": formattedDate,
+              "startLatitude": data["startLatitude"],
+              "startLongitude": data["startLongitude"],
+              "endLatitude": value.latitude,
+              "endLongitude": value.longitude,
+            })
+          });
       snackbar("Ride Cancel");
     } else {
       snackbar("Not Allow to cancel Ride");
@@ -145,17 +151,10 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> parkedRide(data) async {
     if (data["UID"] != null) {
       // DateTime now = DateTime.now();
+      await firestore.collection("BookRide").doc("${data["barcode"]}").update({
+        "condition": 2,
+      });
       _getCurrentLocation().then((value) async => {
-            await firestore
-                .collection("BookRide")
-                .doc("${data["barcode"]}")
-                .update({
-              "startLatitude": data["startLatitude"],
-              "startLongitude": data["startLongitude"],
-              "endLatitude": value.latitude,
-              "endLongitude": value.longitude,
-              "condition": 2,
-            }),
             await firestore
                 .collection("users")
                 .doc(widget.UserData["UID"])
