@@ -49,6 +49,7 @@ class _historyState extends State<history> {
           return Center(child: const Text("No data found"));
         }
         return ListView(
+          reverse: true,
           shrinkWrap: true,
           physics: const BouncingScrollPhysics(
               parent: AlwaysScrollableScrollPhysics()),
@@ -56,7 +57,8 @@ class _historyState extends State<history> {
           children: snapshot.data!.docs.map((DocumentSnapshot document) {
             Map<String, dynamic> data =
                 document.data()! as Map<String, dynamic>;
-            String start_time = data["BookRideTime"].toString(); // or if '24:00'
+            String start_time =
+                data["BookRideTime"].toString(); // or if '24:00'
             String end_time = data["StopRideTime"].toString(); // or if '12:00
 
             var format = DateFormat("dd MM yyyy HH:mm");
@@ -89,12 +91,14 @@ class _historyState extends State<history> {
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("Qr No: ${data['barcode']}"),
+                        Text("Bike No: ${data['barcode']}"),
                         spacer(5.0, 0.0),
                         data["startLatitude"] != null &&
                                 data["startLongitude"] != null &&
                                 data["endLatitude"] != null &&
-                                data["endLongitude"] != null
+                                data["endLongitude"] != null &&
+                            data["startLongitude"] !=
+                                data["endLongitude"]
                             ? Text("Distance: ${Geolocator.distanceBetween(
                                 data["startLatitude"],
                                 data["startLongitude"],

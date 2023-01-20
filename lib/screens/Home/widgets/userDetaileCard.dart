@@ -79,35 +79,43 @@ class userDetaileCard extends StatelessWidget {
                     "                    (${UserData["rollNo"]})",
                     style: TextStyle(fontSize: 15),
                   ),
-                  Container(
-                    padding: const EdgeInsets.all(10),
-                    margin: const EdgeInsets.only(top: 10),
-                    decoration: BoxDecoration(
-                        color: active,
-                        border: Border.all(color: Colors.grey.shade300),
-                        borderRadius: BorderRadius.circular(10)),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        const Icon(Icons.access_time_sharp),
-                        spacer(0.0, 10.0),
-                        Text("$time"),
-                        spacer(0.0, 100.0),
-                        const Icon(Icons.directions_bike_sharp),
-                        spacer(0.0, 10.0),
-                        UserData["startLatitude"] != null &&
-                                UserData["startLongitude"] != null &&
-                                UserData["endLatitude"] != null &&
-                                UserData["endLongitude"] != null
-                            ? Text(Geolocator.distanceBetween(
-                                UserData["startLatitude"],
-                                UserData["startLongitude"],
-                                UserData["endLatitude"],
-                                UserData["endLongitude"],
-                              ).toString().substring(0,5))
-                            : const Text("Null"),
-                      ],
-                    ),
+                  Row(
+                    children: [
+
+                      Container(
+                        padding: const EdgeInsets.all(10),
+                        margin: const EdgeInsets.only(top: 10),
+                        decoration: BoxDecoration(
+                            color: active,
+                            border: Border.all(color: Colors.grey.shade300),
+                            borderRadius: BorderRadius.circular(10)),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            const Icon(Icons.access_time_sharp),
+                            spacer(0.0, 10.0),
+                            Text("$time"),
+                            spacer(0.0, 120.0),
+                            const Icon(Icons.directions_bike_sharp),
+                            spacer(0.0, 10.0),
+                            UserData["startLatitude"] != null &&
+                                    UserData["startLongitude"] != null &&
+                                    UserData["endLatitude"] != null &&
+                                    UserData["endLongitude"] != null
+                            &&UserData["startLongitude"]!=UserData["endLongitude"]
+                                ? Text(Geolocator.distanceBetween(
+                                    UserData["startLatitude"],
+                                    UserData["startLongitude"],
+                                    UserData["endLatitude"],
+                                    UserData["endLongitude"],
+                                  ).toString().substring(0,5))
+                                : const Text("Null"),
+                          ],
+                        ),
+                      ),
+                      spacer(10.0, 40.0),
+
+                    ],
                   ),
                 ],
               ),

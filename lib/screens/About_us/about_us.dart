@@ -26,7 +26,7 @@ class about_us extends StatelessWidget {
           child: Column(
             // crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              heading("Charge Go:"),
+              heading("Charge & Go:"),
               paragraph(
                   """Charge and go is an electric bike convenient, and sustainable to move through the 
 university. all it takes is to download its android application scan the QR code on it 
@@ -36,8 +36,8 @@ app. charge and go is an efficient, fun way to travel around."""),
               spacer(12.0, 0.0),
               spacer(12.0, 0.0),
               heading("Contact:"),
-              rowpara("Phone No:  ", "03XX-XXXXXXXXX"),
-              rowpara("Email:         ", "abc@gmail.com"),
+              rowpara("Phone No:  ", "+923362595099"),
+              rowpara("Email:         ", "chargeandgosau@gmail.com"),
               // rowpara("Website:     ", "https://portfolio-2021.web.app/"),
             ],
           ),

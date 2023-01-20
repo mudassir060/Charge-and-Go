@@ -24,11 +24,11 @@ class _InviteFriendState extends State<InviteFriend> {
   @override
   Widget build(BuildContext context) {
     InviteNow() {
-      Share.share("""Food waste management system for restaurants and food businesses. 
--Provides customers with real-time food waste management information.
--Provides restaurants and food businesses with a method to effectively manage food waste in their stores.
--Includes a mobile app that allows users to track food waste, manage donations and communicate with nonprofits.
- 👉👉${widget.AdminData["apkUrl"]}.""");
+      Share.share("""Charge and go is an electric bike convenient, and sustainable to move through the 
+university. all it takes is to download its android application scan the QR code on it 
+to activate it and start your ride. You can drive everywhere within the coverage 
+area. you can easily park the Bike at a suitable location and end your trip using the 
+app. charge and go is an efficient, fun way to travel around. 👉👉${widget.AdminData["apkUrl"]}.""");
 
   }
 

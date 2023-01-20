@@ -53,7 +53,7 @@ class _Signup_screenState extends State<Signup_screen> {
           rollNo != '' &&
           userpassword != '') {
         DateTime now = DateTime.now();
-        String formattedDate = DateFormat('EEE d MMM').format(now);
+        String formattedDate = DateFormat('dd MM yyyy HH:mm').format(now);
         final UserCredential user = await auth.createUserWithEmailAndPassword(
             email: useremail, password: userpassword);
         await firestore.collection("users").doc(user.user!.uid).set({

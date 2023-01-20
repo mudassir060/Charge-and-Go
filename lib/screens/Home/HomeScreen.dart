@@ -205,7 +205,7 @@ class _HomeScreenState extends State<HomeScreen> {
             UserData: widget.UserData,
             AdminData: widget.AdminData,
           ),
-          appBar: MyAppBar2(context, "Charge Go", false, () => null, false),
+          appBar: MyAppBar2(context, "Charge & Go", false, () => null, false),
           body: StreamBuilder<QuerySnapshot>(
             stream: _chargeGoStream,
             builder:
@@ -332,7 +332,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ],
                               ),
                               spacer(10.0, 0.0),
-                              Text('Bick id: ${data["barcode"]}'),
+                              Text('Bike No: ${data["barcode"]}'),
                               spacer(10.0, 0.0),
                               Text('Booking Time: ${data["BookRideTime"]}')
                             ],
